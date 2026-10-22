@@ -27,3 +27,9 @@
 - 公式Xプロフィール自己紹介欄の具体的な対象ビューと実値。
 - `additionalEdgeInsets` から最終的なCGRectへの適用経路。
 - 公式Xの表示決定規則がScarlet Xで複数端末に再現できることの検証。
+
+## 2026-10-23 — Drive受信結果（実測）
+- Drive `Probe/SXProbe_2026-10-23_001123.json` を取得して確認（公式X **12.35 build 27**）。JSONは有効、`schemaVersion=1`、`entries` は **1件**。
+- 唯一の記録は `recording-restored` / `enabled=true`。**今回のJSONに `method-probe-invoked` / `method-names` / `method-probe-completed` は存在しない**。したがって「クラスメソッド情報を記録」押下の成功は確認できない。
+- 過去の `SXProbe_2026-10-22_031755.json` には `probe-enabled` と4件の `class-check`（各 `present=1`）がある。これはクラス存在チェックの証拠であり、メソッド列挙成功の証拠ではない。
+- 次は端末で「クラスメソッド情報を記録」を押して**記録完了ダイアログ**を確認し、その直後に「診断JSONをDriveへ送信」した新しいJSONを調べる。既存Probeのコード変更は現時点では不要。
