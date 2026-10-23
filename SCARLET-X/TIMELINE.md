@@ -115,3 +115,8 @@
 - SCARLET-X-Probe/developに認証付きダウンローダ `tools/private_probe_update.py`とガイド `tools/PRIVATE_UPDATER.md`を追加。PATを保存/コマンドラインに載せず、artifact配信先への認証転送を防止。パッケージ検証後のみプライベート領域に保存。
 - commits `e91f00001ccff6959d9be0901e3e0b4cda96d2ab`, `ec28df51c546b0f51b2a02b75d9f16048c0150e5`, `e875e8b8b48639413078e55dc4ea3e46c097588f`。
 - 自動インストールもショートカットも未実装。SE実行環境・DL・Sileo導入・Actionsの成否未検証。Probe本体のこの作業によるversion変更なし、main未変更。
+
+### 2026-10-24 — Private Probe updater field parse fix
+- SE実機からGitHub API認証、非公開Actions artifact取得成功（workflow run 39966745960）。「Unexpected package identity or architecture」でインストール前検証停止、既存Probe不変。
+- `dpkg-deb -f <deb> Package Version Architecture`が各行に`Package: `等のラベルを付ける挙動を再現し、ダウンローダーのパーサー欠陥と確認。単独値として扱っていたのが原因。
+- `SCARLET-X-Probe/develop/tools/private_probe_update.py`をラベル除去処理へ修正（commit `da151391de685d12826305947a9fa23d94ce841e`）。SE実行は未検証、更新前のProbeへ手を触れず。
