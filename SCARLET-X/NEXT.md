@@ -68,3 +68,8 @@
 - v12.25 `T1Twitter`内の直接BL走査では `setBioLabelFrame:` stub `0x1337B60`およびIMP `0x3AFDE8`への直接呼出は0件。getter `bioLabelFrame`は `applyToUserView:`で1件検出。
 - [調査・限界](OfficialXResearch/ProfileBioSetterCallers20261023.md)。**objc_msgSend/他framework/直接ivar書込みは未除外**。
 - 次は他framework・レイアウト状態生成経路の探索。SE実機なら計測値取得が近道だが、Probe機能追加と複数条件検証が必要。
+
+## 2026-10-23 — SEなしでのbio計測候補の発見
+- 公式X v12.25 T1Twitterに `_t1_sizeForBioWithOptions:size:layoutMetrics:cachedTextSizing:`（IMP `0x141CD8`、method list `0x1393E10`）がある。username/fullname等のサイズ計測メソッドと同一リスト。
+- [一次証拠と未確定部分](OfficialXResearch/BioSizingAlternative20261023.md)。所有クラス、bio CGRectとの接続、計測アルゴリズムは未特定。
+- SE不要の次作業: 所有クラス特定→呼出スタブ解決→profile側layoutStateへの接続検証。
