@@ -110,3 +110,8 @@
 - GitHub developの現行ファイルをSHA確認して編集。既存投稿4クラスを残しプロフィール6クラスを追加、存在チェックと記録件数の母数を10に修正。
 - ProbePanel.m commit 61a99358cc9249eb0ea4fbafc7e1dea0c26bfc8e。control commit cd01b5fdb19c2609ea59b3d033ae5e45167c0d1c。Tweak.xm commit 62acee60c2e04a2df5a4f47e554c09f06349b016。
 - ソース再取得で変更内容と既存Drive/手動操作を確認。Build/SE実機の成功は未確認。Scarlet Xアプリ本体とProbe/mainは未変更。
+
+### 2026-10-23 — 非公開GitHub Actions→Sileo用deb取得MVP
+- SCARLET-X-Probe/developに認証付きダウンローダ `tools/private_probe_update.py`とガイド `tools/PRIVATE_UPDATER.md`を追加。PATを保存/コマンドラインに載せず、artifact配信先への認証転送を防止。パッケージ検証後のみプライベート領域に保存。
+- commits `e91f00001ccff6959d9be0901e3e0b4cda96d2ab`, `ec28df51c546b0f51b2a02b75d9f16048c0150e5`, `e875e8b8b48639413078e55dc4ea3e46c097588f`。
+- 自動インストールもショートカットも未実装。SE実行環境・DL・Sileo導入・Actionsの成否未検証。Probe本体のこの作業によるversion変更なし、main未変更。
