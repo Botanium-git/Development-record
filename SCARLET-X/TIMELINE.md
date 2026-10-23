@@ -68,3 +68,7 @@
 - 公式X v12.25 IPA実物、SQLite `objc_methods`、ARM64命令を確認。
 - `_t1_sizeForBioWithOptions:size:layoutMetrics:cachedTextSizing:`（IMP `0x141CD8`）が、username/fullname等の計測APIと同一method listにあることを確認。
 - 画面ごとの利用先、所有クラス、bio CGRectの計算規則は未確定。[詳細](OfficialXResearch/BioSizingAlternative20261023.md)。SCARLET-X/Probeのコード変更なし。
+
+### 2026-10-23 — T1UserViewのbioフォントfallback分岐確認
+- X v12.25 ARM64命令より`metricsFont`がnilの場合のみ`xds_body`を呼び、`lineHeight`はmetricsから独立取得。具体値・受信クラス未確定。
+- [記録](OfficialXResearch/T1UserViewFontFallback20261023.md)。Scarlet X/Probeのコード変更・実機確認なし。
