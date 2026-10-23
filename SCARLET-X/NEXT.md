@@ -41,7 +41,7 @@
 ### 確認できた候補
 - `T1ProfileUserInfoView`, `T1ProfileUserInfoViewController`, `T1ProfileUserInfoViewConfiguration`, `T1ProfileHeaderView`, `T1ProfileHeaderViewController` はシンボル／文字列索引に存在する。
 - プロフィール自己紹介と関連しそうなセレクタ文字列として `_t1_buildBioLabelWithAccessibilityIdentifier:`, `_t1_refreshBioLabel`, `_t1_setBioLabel:withText:entities:isUTF16Entities:`, `_t1_refreshTranslatedBioLabel`, `bioLabel`, `translatedBioLabel` を確認。ただし現SQLiteの `objc_methods` はこれらを全て網羅しておらず、名前だけで所有クラス／IMPを確定できない。
-- `objc_methods` 上 `bioLabelFrame` IMP=0x3AFDDC (T1Twitter binary 1) は `list_address=0x13E7340` の51メソッド群に所属。同群には `userNameLabelFrame`, `fullNameLabelFrame`, `socialTextFrame`, `infoTextLabelFrame`, `avatarFrame` 等のフレームgetter/setterが存在する。**プロフィール表示のレイアウトデータ候補**。
+- `objc_methods` 上 `bioLabelFrame` IMP=0x3AFDDC (T1Twitter binary 1) は `list_address=0x13E7490` の51メソッド群に所属。同群には `userNameLabelFrame`, `fullNameLabelFrame`, `socialTextFrame`, `infoTextLabelFrame`, `avatarFrame` 等のフレームgetter/setterが存在する。**プロフィール表示のレイアウトデータ候補**。
 - `_t1_bioTextModelForUser:` は `objc_methods` でIMP=0x1BF0EC、単独記録のメソッドリストがある。実際の描画対象との対応は未確定。
 - `ProfileHeaderBio`, `ProfileHeaderInfoView`, `ProfileHeaderTranslatedBio` も文字列に存在するが、クラス名や最終描画ビューと断定しない。
 
