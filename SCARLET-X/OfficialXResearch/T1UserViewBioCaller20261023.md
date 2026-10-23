@@ -57,3 +57,15 @@ At calls to stub `0x1359540` the immediate component argument `w2` is:
 | `0x484d38` | 12 |
 
 **Bio confirmed:** `0x483D7C mov w2,#4`, `0x483D88 mov x3,x19`, `0x483D8C bl 0x1359540`. Caller-function ownership, x19 provenance, runtime screen selection and final CGRect remain unverified.
+
+
+## 2026-10-23 — bio呼出関数の入口・実際の入力・CGRect setterブロック（追加）
+- ユーザー提供v12.25 T1Twitter実バイナリを `llvm-objdump` で `0x483C58..0x483DC4`まで確認。
+- `0x483D40` に独立したARM64関数プロローグ、`0x483DBC ret` を確認。`0x483D50 mov x19,x2`で第3引数を保持、`0x483D5C mov x20,x1`で第2引数を保持。
+- `0x483D68 mov x0,x20; 0x483D6C bl 0x1363600`: stubのADRP/LDR→selref VM `0x1AC0F48`→selector **`tfn_flexibleLayoutViewModel`** と解決。返ったモデル相当のobjectを `0x483D78`でx20に保持。
+- `0x483D7C mov w2,#4`, `0x483D88 mov x3,x19`, `0x483D8C bl 0x1359540`: `sizeForComponent:withSize:layoutMetrics:` を component=4、metrics=x19 で送る。呼出 receiver は直前の `tfn_flexibleLayoutViewModel`の返り値（x20）。以前の「x19の由来未確定」は、この関数内では**第3引数x2**まで解決。
+- 近接する `0x483DC0 ldr x0,[x0,#0x20]; 0x483DC4 b 0x1337B60` はstub selector `setBioLabelFrame:`。受信対象は先頭引数のblock/objectのoffset+0x20の参照先。ただし実際のclassは未確定。
+- その直前の別関数 `0x483C58` は `0x483CB0 add x8,x8,#0xDC0` で `0x483DC0`へのfunction pointerをブロック状の構造に格納し、`0x483CC4 str x19,[sp,#0x28]` でcaptureを組み立てる。`0x483CD8 bl 0x1365140`でこのblockを渡す。
+- **重要:** setter側のスタブに対する通常BLがゼロでも、block invokeからtail branch（B）する呼出経路が存在する。これが以前のBLのみの検索で拾えなかった理由の一つ。
+- 以上によりbio計測経路と`setBioLabelFrame:`のblock化処理が近接し、共通のレイアウト実装群にあることを実証。ただし **個別のblockがどの条件・順番で実行され、得たCGSizeがどのCGRect座標へ変換されるかは未確定**。画面ごとのruntime採用・v12.35の同一性も未確認。
+- 次: `0x1365140` のObjC selectorとblock保持先、`0x483C58`のowner/呼出元、x2で渡るmetricsの生成元を追う。アプリ・Probeは未変更。
