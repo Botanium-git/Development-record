@@ -33,3 +33,27 @@
 - 元T1Twitter実命令の直接BL走査でこのstubへのcallsiteは**15件**: `0xD1CD4`, `0x14C998`, `0x4835C8`, `0x483738`, `0x4839A8`, `0x483C1C`, `0x483D8C`, `0x483FFC`, `0x48416C`, `0x4842DC`, `0x48444C`, `0x4845BC`, `0x48482C`, `0x484AC0`, `0x484D38`。
 - SQLiteで直前のメソッド開始位置を照合すると、`0x14C998`は`layoutItemsForLayoutContainer:withParameters:layoutState:contentRectProvider:`（開始`0x14C05C`）の範囲内、`0x4835C8..0x484D38`の13件は`sizeThatFitsHelper:layoutSubviewsForView:atWidth:`（開始`0x483408`）の範囲内。`0xD1CD4`も同名のlayoutItems系開始`0xD1594`以降。ただし境界・呼出receiverの確認を要するため、これをプロフィール画面採用と断定しない。
 - `0x14C998`では`component=10`、x3はx19から渡す。**component4（bio）を呼んでいるとの証拠ではない**。各callsiteのcomponent番号とmetricsの出自を別々に確認する必要がある。
+
+## Correction 2026-10-23: function boundaries and component calls
+
+Direct llvm-objdump of original T1Twitter shows multiple independent function entries between the thirteen callsites, so they must NOT all be attributed to a single `sizeThatFitsHelper` method based on the preceding indexed IMP. This corrects the preliminary statement in the section above.
+
+At calls to stub `0x1359540` the immediate component argument `w2` is:
+
+| BL address | component |
+|---|---:|
+| `0x4835c8` | 0 |
+| `0x483738` | 1 |
+| `0x4839a8` | 2 |
+| `0x483c1c` | 3 |
+| `0x483d8c` | 4 |
+| `0x483ffc` | 5 |
+| `0x48416c` | 6 |
+| `0x4842dc` | 7 |
+| `0x48444c` | 8 |
+| `0x4845bc` | 9 |
+| `0x48482c` | 10 |
+| `0x484ac0` | 11 |
+| `0x484d38` | 12 |
+
+**Bio confirmed:** `0x483D7C mov w2,#4`, `0x483D88 mov x3,x19`, `0x483D8C bl 0x1359540`. Caller-function ownership, x19 provenance, runtime screen selection and final CGRect remain unverified.
