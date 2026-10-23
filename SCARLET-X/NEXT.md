@@ -103,3 +103,8 @@
 - 近傍`0x483DC0`はcaptured object `+0x20`に対して`setBioLabelFrame:` stubへ**B（tail branch）**。`0x483C58`の別関数がこのinvoke pointerをブロック様構造へ格納する。以前のBLだけのcaller検索ではこの経路を検出できない。
 - **未確定:** block実行順、CGRect算出、x2 metricsの上位生成元、runtimeでの採用。
 - [証拠](OfficialXResearch/T1UserViewBioCaller20261023.md)。次はblock登録メソッド`0x1365140`のselector解決と上位caller追跡。
+
+## 2026-10-23 — bio flexible layout両コールバック接続確定
+- `0x483C58`が` tfn_withFlexibleLayoutSizeCalculator:`へ定数block `0x1882490`を渡す。このblockのinvokeポインタは実バイトで`0x483D40`（bio component4計測）と確認。
+- 同じ関数が` tfn_withFlexibleLayoutFrameListener:`へinvoke `0x483DC0`のstack blockを登録。後者は`setBioLabelFrame:`へtail branch。
+- [実命令とblockポインタ](OfficialXResearch/T1UserViewBioCaller20261023.md)。次はflexible layout engineによるサイズ→CGRect算出規則と上位layoutMetrics生成元。実機値/ランタイム採用は未確認。
