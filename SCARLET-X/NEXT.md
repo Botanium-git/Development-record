@@ -77,3 +77,8 @@
 ## 2026-10-23 — bioフォントの分岐を命令確認
 - `T1UserViewBuildTextModel`はlayout metricsの`metricsFont`を優先し、nil時に限り`xds_body` fallback。`lineHeight`は同じmetricsから別途取得。ソース: [T1UserViewFontFallback20261023.md](OfficialXResearch/T1UserViewFontFallback20261023.md)。
 - 次: fallback受信クラスのchained fixup解析、layout metrics生成元、bio CGSize→CGRectの伝搬経路。
+
+## 2026-10-23 — bioレイアウト指標の引数伝搬・UIFont fallback確認
+- v12.25実命令により、`T1UserView._t1_sizeForBio...`の`layoutMetrics:`引数は、キャッシュ付きテキストモデル生成を経て`metricsFont`/`lineHeight`の受信者へ渡される。
+- fallbackのchained-fixup import ordinal `0x3ADC`は `_OBJC_CLASS_$_UIFont` と解決。`[UIFont xds_body]`呼び出しを確認。
+- 詳細: [T1UserViewMetricsProvenance20261023.md](OfficialXResearch/T1UserViewMetricsProvenance20261023.md)。次は上位呼出元とlayoutMetrics生成元。具体フォント値は未確認。
