@@ -100,3 +100,8 @@
 - T1Twitter実バイナリで`0x1365180`=`tfn_withFlexibleLayoutSizeCalculator:`、`0x1365140`=`tfn_withFlexibleLayoutFrameListener:`を解決。
 - size block`0x1882490`のinvokeは`0x483D40` (component4→bio計測)、frame listenerのinvokeは`0x483DC0` (`setBioLabelFrame:`)。`0x483C58`で両者登録を確認。
 - 計算サイズからCGRectへの変換・layoutMetrics生成元は未確定。[詳細](OfficialXResearch/T1UserViewBioCaller20261023.md)。本体/Probe変更なし。
+
+### 2026-10-23 — TFN bio frame listenerがCGRectを転送するのみと確認
+- 提供X v12.25 IPAのARM64命令を再確認。bio size callback `0x483D40` はCGSizeを返し、frame listener `0x483DC0` はsetterへtail Bする2命令で計算式なし。TFN block型情報にもCGSize/TFNLayoutMetrics、CGRect引数が存在。
+- **未確定**: 指定blockへの型情報の最終紐付け、TFNエンジン内部のCGSize→CGRect変換、親レイアウト制約・spacingの数値、実機条件。
+- [詳細](OfficialXResearch/TFNFlexibleBioCallbackABI20261023.md)。Scarlet X/Probe変更なし。
