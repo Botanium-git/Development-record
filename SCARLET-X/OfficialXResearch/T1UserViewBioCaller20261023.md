@@ -16,7 +16,7 @@
 
 ## 解釈の境界
 - **確定**：component4→bio; `sizeForComponent`→`T1UserView.sizeForDynamicComponent`→bio計測→text modelの静的連鎖。
-- **未確定**：このオブジェクトのclass_ro所有名（method listへの最終照合）、上位呼出元がどこでlayoutMetricsを生成するか、プロフィール画面の実際の採用経路、CGSize→bioLabelFrameの接続。ObjC動的呼出・他バイナリへの完全な呼出追跡ではない。
+- **未確定**：上位呼出元がどこでlayoutMetricsを生成するか、プロフィール画面の実際の採用経路、CGSize→bioLabelFrameの接続。ObjC動的呼出・他バイナリへの完全な呼出追跡ではない。
 - SE v12.35実測、アプリ・Probeコード変更、ビルドは今回なし。
 
 ## 次
@@ -25,5 +25,5 @@
 3. `initWithOptions:layoutMetrics:estimated:`呼出元からlayoutMetrics作成元を探し、最終CGRectへのデータフローを検証。
 
 ## 所有クラス追加確認
-- 元Mach-O実バイトを走査し、method list VM `0x1385260` (=20870144)を指すclass_ro `baseMethods`ポインタをVM `0x19882B8`で検出。class_ro先頭VM `0x1988298` のname pointerが指すC文字列は **`T1UserViewLayoutParameters`**。
+- 元Mach-O実バイトを走査し、method list VM `0x13E7400` (=20870144)を指すclass_ro `baseMethods`ポインタをVM `0x19882B8`で検出。class_ro先頭VM `0x1988298` のname pointerが指すC文字列は **`T1UserViewLayoutParameters`**。
 - よって`initWithOptions:layoutMetrics:estimated:`および`sizeForComponent:withSize:layoutMetrics:`は **`T1UserViewLayoutParameters`のメソッド**と確認。前節の「所有名未確認」は本追加確認で解消。
