@@ -9,7 +9,7 @@
 - `bioLabelFrame` IMP `0x3AFDDC` は `ldp d0,d1,[x0,#0xD8]` / `ldp d2,d3,[x0,#0xE8]` / `ret`。CGRectの4 doubleをオブジェクトのオフセット `0xD8..0xF7` から読み出す。
 - `setBioLabelFrame:` IMP `0x3AFDE8` は `stp d0,d1,[x0,#0xD8]` / `stp d2,d3,[x0,#0xE8]` / `ret`。渡されたCGRectをそのまま保存。**このsetterにフレーム計算処理は存在しない**。
 - `applyToUserView:` IMP `0x3AF410` は数多くの外部スタブ経由のCGRect getter/setter呼出しと、返された4 double（v0..v3）の受渡しを含む。呼び出し先スタブ `0x133F080` が繰り返し登場し、ビュー側に複数のレイアウト状態を渡す処理であることが命令上裏付けられる。
-- ただし現時点で `applyToUserView:` の各スタブをselectorまで解決しておらず、**bioLabelFrameに対応する個別callsite・適用先UIView/UILabelは未確定**。またsetterの呼出元は未特定。
+- さらにObjC stubの`ADRP/LDR`から`__objc_selrefs`をたどり、**`applyToUserView:`の`0x3AF874`で`bioLabelFrame`を呼び、直後に保持したCGRectを`0x3AF8AC`の`setFrame:`呼出しへ渡す経路を確認**。`bioLabelFrame`側のstub `0x12DADE0`、`setFrame:`側のstub `0x133F080`も実バイトからselector解決した。ただし`setFrame:`の**受信ビューのクラス・プロパティ名は未確定**。またsetterの呼出元は未特定。
 
 ## 解析で判明した境界
 - `bioLabelFrame` と `setBioLabelFrame:` は保存場所を示すaccessorであって、幅・行高・位置の決定規則そのものではない。
@@ -17,6 +17,6 @@
 - v12.25静的結果を、SE公式X v12.35でも同じ実装と仮定しない。公式X実測値は未取得。
 
 ## 次の限定調査
-1. `applyToUserView:` 内の呼出先スタブをObjC selectorへ解決し、`bioLabelFrame`→`setFrame:` の対応箇所を特定。
+1. `applyToUserView:` の `0x3AF874`→`0x3AF8AC` でCGRect受渡しは確認済み。`setFrame:`の受信ビューを返す直前の呼び出し（`0x3AF888`付近）をselector解決し、その所有ビューを特定。
 2. `setBioLabelFrame:` 呼出元、または対応IVARへの直接書込みがないかを調べてフレーム計算元を追う。
 3. アプリ本体UIは規則が判明するまで変更しない。
