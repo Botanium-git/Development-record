@@ -20,3 +20,9 @@
 1. `applyToUserView:` の `0x3AF874`→`0x3AF8AC` でCGRect受渡しは確認済み。`setFrame:`の受信ビューを返す直前の呼び出し（`0x3AF888`付近）をselector解決し、その所有ビューを特定。
 2. `setBioLabelFrame:` 呼出元、または対応IVARへの直接書込みがないかを調べてフレーム計算元を追う。
 3. アプリ本体UIは規則が判明するまで変更しない。
+
+## 追加確認 — bioの適用先プロパティを解決
+- `applyToUserView:` の `0x3AF88C` が呼ぶObjC stub `0x12DAC80` を`__objc_selrefs`から解決し、selector **`bioAttributedTextView`** と確認。
+- この戻り値が `objc_retainAutoreleasedReturnValue` を経由して `x21` に置かれ、`0x3AF8AC` の `setFrame:` のreceiverに渡される。
+- **確認できた連鎖:** `T1UserViewLayoutState.bioLabelFrame` → （引数`userView`の）`bioAttributedTextView` → `setFrame:`。これにより表示適用対象のプロパティ名まで特定できた。
+- `bioAttributedTextView` が返す実際のビュークラス、`setBioLabelFrame:`への入力CGRectを計算する関数、フォント／行高は引き続き未確定。
