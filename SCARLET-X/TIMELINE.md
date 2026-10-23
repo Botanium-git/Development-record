@@ -72,3 +72,7 @@
 ### 2026-10-23 — T1UserViewのbioフォントfallback分岐確認
 - X v12.25 ARM64命令より`metricsFont`がnilの場合のみ`xds_body`を呼び、`lineHeight`はmetricsから独立取得。具体値・受信クラス未確定。
 - [記録](OfficialXResearch/T1UserViewFontFallback20261023.md)。Scarlet X/Probeのコード変更・実機確認なし。
+
+### 2026-10-23 — bio metrics伝搬とUIFont fallback解決
+- 公式X v12.25 T1Twitter実命令／chained fixupsを解析。`layoutMetrics:`引数から`metricsFont`・`lineHeight`へ到達するデータフロー、およびnil fallback先の`_OBJC_CLASS_$_UIFont`を確認。
+- 実際のフォント・行高の数値とmetrics初期化元は未確認。 [証拠](OfficialXResearch/T1UserViewMetricsProvenance20261023.md)。アプリ・Probe変更なし。
