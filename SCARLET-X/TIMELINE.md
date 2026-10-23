@@ -76,3 +76,7 @@
 ### 2026-10-23 — bio metrics伝搬とUIFont fallback解決
 - 公式X v12.25 T1Twitter実命令／chained fixupsを解析。`layoutMetrics:`引数から`metricsFont`・`lineHeight`へ到達するデータフロー、およびnil fallback先の`_OBJC_CLASS_$_UIFont`を確認。
 - 実際のフォント・行高の数値とmetrics初期化元は未確認。 [証拠](OfficialXResearch/T1UserViewMetricsProvenance20261023.md)。アプリ・Probe変更なし。
+
+### 2026-10-23 — T1UserView bio component=4を実命令から確定
+- X v12.25 T1Twitterのジャンプテーブル `0x144DEE1` を実バイト読取り。component4→`0x1416D8`→ObjC stub `0x12C9780`→`_t1_sizeForBioWithOptions:size:layoutMetrics:cachedTextSizing:`をselrefで確認。
+- 既存OX-020/021は投稿本文側の解析として参照し、bioと同じレイアウト規則と断定しない。[証拠](OfficialXResearch/T1UserViewBioDispatcher20261023.md)。本体・Probe変更なし。
