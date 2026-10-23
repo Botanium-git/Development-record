@@ -82,3 +82,7 @@
 - v12.25実命令により、`T1UserView._t1_sizeForBio...`の`layoutMetrics:`引数は、キャッシュ付きテキストモデル生成を経て`metricsFont`/`lineHeight`の受信者へ渡される。
 - fallbackのchained-fixup import ordinal `0x3ADC`は `_OBJC_CLASS_$_UIFont` と解決。`[UIFont xds_body]`呼び出しを確認。
 - 詳細: [T1UserViewMetricsProvenance20261023.md](OfficialXResearch/T1UserViewMetricsProvenance20261023.md)。次は上位呼出元とlayoutMetrics生成元。具体フォント値は未確認。
+
+## 2026-10-23 — T1UserViewのbio component番号確定
+- 公式X v12.25実バイナリのbyte jump table `0x144DEE1`とObjC selrefを照合し、`sizeForDynamicComponent:withOptions:size:layoutMetrics:cachedTextSizing:`の**component=4が`_t1_sizeForBioWithOptions:size:layoutMetrics:cachedTextSizing:`へdispatch**されると確定。
+- [根拠](OfficialXResearch/T1UserViewBioDispatcher20261023.md)。次は共通dispatcherの上位callerとlayoutMetrics生成元を追う。投稿本文のlayoutMetrics規則をbioに転用しない。
