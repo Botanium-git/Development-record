@@ -108,3 +108,8 @@
 - `0x483C58`が` tfn_withFlexibleLayoutSizeCalculator:`へ定数block `0x1882490`を渡す。このblockのinvokeポインタは実バイトで`0x483D40`（bio component4計測）と確認。
 - 同じ関数が` tfn_withFlexibleLayoutFrameListener:`へinvoke `0x483DC0`のstack blockを登録。後者は`setBioLabelFrame:`へtail branch。
 - [実命令とblockポインタ](OfficialXResearch/T1UserViewBioCaller20261023.md)。次はflexible layout engineによるサイズ→CGRect算出規則と上位layoutMetrics生成元。実機値/ランタイム採用は未確認。
+
+## 2026-10-23 — TFN bio callback ABI実命令確認
+- v12.25 `T1Twitter` のsize callback `0x483D40`はcomponent4の計測結果（v0/v1 CGSize相当）を返す。frame listener `0x483DC0`は受け取ったframeを加工せず`setBioLabelFrame:`へtail branchで転送。
+- flexible layout関連の型文字列に`TFNLayoutMetrics`、`CGSize`、`CGRect`を確認。ただし文字列と当該callbackを1対1対応させるblock descriptorは未確認。
+- [根拠](OfficialXResearch/TFNFlexibleBioCallbackABI20261023.md)。次はTFNエンジン実装モジュール、配置のorigin/spacing計算、metrics作成元を特定する。
