@@ -23,3 +23,13 @@ Scarlet X と関連開発（SCARLET-X-Probe、公式X解析）の**横断的な�
 - [Scarlet X](https://github.com/Botanium-git/SCARLET-X) — アプリ本体と公式X静的解析の台帳
 - [SCARLET-X-Probe](https://github.com/Botanium-git/SCARLET-X-Probe) — 公式X iOS側の読み取り専用動的診断
 - [設計方針・引継ぎ](https://github.com/Botanium-git/SCARLET-X/blob/develop/Docs/ScarletXArchitectureAndHandoff.md) — 製品方針の正本
+
+## 移管された解析資料（2026-10-23）
+
+Scarlet X の `main` / `develop` から、解析専用のファイルを移動。**アプリ用の診断ソースコードは移動していない**。
+
+- [公式X解析の台帳・証拠（6ファイル）](SCARLET-X/OfficialXResearch/OfficialXFindingsLedger.md)
+- [解析用Pythonスクリプト（9本）と説明](SCARLET-X/ResearchTools/README.md)
+- [旧main版の説明（差分保存）](SCARLET-X/ResearchTools/README-main-baseline.md)
+
+移管元と移管先のblob SHA照合を実施してから削除。ファイルは移動先に残し、Scarlet Xの本体ビルドに含まれる診断用 `.m/.h` ファイルは維持した。
