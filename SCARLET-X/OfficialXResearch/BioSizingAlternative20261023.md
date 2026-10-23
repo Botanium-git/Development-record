@@ -21,3 +21,10 @@
 1. `0x1393E10`の所有クラスをclass_roとbaseMethodsで特定。
 2. `0x141CD8`のObjC stubをselector名に解決し、文字列、サイズ、フォント、キャッシュの利用箇所を切り分ける。
 3. この計測処理の戻り値が`T1UserViewLayoutState.bioLabelFrame`に接続するか、呼出元・layoutState生成経路を確認する。
+
+## 追加検証：所有クラスを実バイナリで確認
+- Mach-O LC_SEGMENT_64でVMアドレスとファイルオフセットを対応させ、8バイト境界のbaseMethodsポインタ（下位36bit `0x1393E10`）を検索。
+- 当該baseMethodsを持つclass_roはVM `0x195EDC8`、`baseMethods`フィールドは `0x195EDE8`。
+- class_roの`name`ポインタが指すC文字列は**`T1UserView`**。
+- したがって、`_t1_sizeForBioWithOptions:size:layoutMetrics:cachedTextSizing:`を含む同一method listの所有クラスは**`T1UserView`**と確認できた。
+- ただし`T1UserView`のメソッドであることと、プロフィール自己紹介欄の実際のCGRect値への接続は別問題。呼出元と戻り値の伝搬は未確認。
