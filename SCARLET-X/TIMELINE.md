@@ -51,3 +51,10 @@
 - **確認済み:** 所有クラスは`T1UserViewLayoutState`（class `0x1AF2688`, class_ro `0x19ABE10`, 51 methods）。[調査の根拠](OfficialXResearch/ProfileBioLayoutOwner20261023.md)。
 - **未確認:** レイアウト値の生成・最終適用・実機測定。ビルド／実機検証は今回対象外。
 - 次: `applyToUserView:` と `setBioLabelFrame:` の利用経路を追う。
+
+### 2026-10-23 — bio CGRect生成元の候補を区別
+- 対象: 公式X v12.25 `T1Twitter` Mach-OとSQLite索引。Scarlet X本体・Probeの変更なし。
+- 確認: `_t1_layoutBio:user:width:yCoordinate:` (`0x1C0F70`) がbio文字列取得、空判定、`fitToWidth:`、`actualSize`の後に`setBioFrame:`へCGRectを渡す経路。
+- クラス所有者: `T1UserRecommendationViewLayoutDelegate` → `T1UserRecommendationViewLayoutState`。
+- **重要:** これはユーザーおすすめビュー用。通常プロフィールの `T1UserViewLayoutState.bioLabelFrame` との関連は未確認。類似名による取り違えを避ける。
+- 根拠: [ProfileBioFrameProducer20261023.md](OfficialXResearch/ProfileBioFrameProducer20261023.md)。次は通常プロフィール側 `setBioLabelFrame:` の呼出元を追う。
