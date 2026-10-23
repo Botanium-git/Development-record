@@ -27,3 +27,9 @@
 ## 所有クラス追加確認
 - 元Mach-O実バイトを走査し、method list VM `0x13E7400` (=20870144)を指すclass_ro `baseMethods`ポインタをVM `0x19882B8`で検出。class_ro先頭VM `0x1988298` のname pointerが指すC文字列は **`T1UserViewLayoutParameters`**。
 - よって`initWithOptions:layoutMetrics:estimated:`および`sizeForComponent:withSize:layoutMetrics:`は **`T1UserViewLayoutParameters`のメソッド**と確認。前節の「所有名未確認」は本追加確認で解消。
+
+## さらに上位の呼出箇所（2026-10-23追記）
+- `sizeForComponent:withSize:layoutMetrics:`のC文字列VM `0x168C762`→selref `0x1ABE718`→ObjC stub `0x1359540`。
+- 元T1Twitter実命令の直接BL走査でこのstubへのcallsiteは**15件**: `0xD1CD4`, `0x14C998`, `0x4835C8`, `0x483738`, `0x4839A8`, `0x483C1C`, `0x483D8C`, `0x483FFC`, `0x48416C`, `0x4842DC`, `0x48444C`, `0x4845BC`, `0x48482C`, `0x484AC0`, `0x484D38`。
+- SQLiteで直前のメソッド開始位置を照合すると、`0x14C998`は`layoutItemsForLayoutContainer:withParameters:layoutState:contentRectProvider:`（開始`0x14C05C`）の範囲内、`0x4835C8..0x484D38`の13件は`sizeThatFitsHelper:layoutSubviewsForView:atWidth:`（開始`0x483408`）の範囲内。`0xD1CD4`も同名のlayoutItems系開始`0xD1594`以降。ただし境界・呼出receiverの確認を要するため、これをプロフィール画面採用と断定しない。
+- `0x14C998`では`component=10`、x3はx19から渡す。**component4（bio）を呼んでいるとの証拠ではない**。各callsiteのcomponent番号とmetricsの出自を別々に確認する必要がある。
