@@ -57,3 +57,9 @@
 - [実バイト根拠・手順](OfficialXResearch/ProfileBioLayoutOwner20261023.md)。
 - **未確定:** `applyToUserView:` での適用先、`setBioLabelFrame:` の値の生成経路、公式Xの自己紹介欄の実測CGRect・フォント・幅・高さ。SE実行版はv12.35で静的資料とバージョン差がある。
 - **次:** 上記2メソッドの呼出関係を限定して追う。Scarlet Xの表示コードは根拠が確定するまで変更しない。
+
+## 2026-10-23 — bio生成候補の切り分け（追記）
+- `_t1_layoutBio:user:width:yCoordinate:` は `T1UserRecommendationViewLayoutDelegate` のメソッド。
+- 計算結果を書き込む `setBioFrame:` は `T1UserRecommendationViewLayoutState` に属する。**通常プロフィール側の `T1UserViewLayoutState.setBioLabelFrame:` とは別経路**。
+- 解析証拠: [ProfileBioFrameProducer20261023.md](OfficialXResearch/ProfileBioFrameProducer20261023.md)。
+- 次は `T1UserViewLayoutState.setBioLabelFrame:` (`0x3AFDE8`) へのcallsite、またはCGRect格納域 `+0xD8`への直接書込みを調べる。プロフィールUIへの仮実装はまだ行わない。
