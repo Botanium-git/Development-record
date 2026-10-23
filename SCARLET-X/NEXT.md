@@ -92,3 +92,8 @@
 - x3で受け取ったlayoutMetricsをx4へ渡す。component 4がbio計測へdispatchするのは前回確定済み。
 - method list `0x13E7400` の所有クラスはclass_roの実バイトで `T1UserViewLayoutParameters` と確認。
 - [詳細](OfficialXResearch/T1UserViewBioCaller20261023.md)。次は `sizeForComponent:withSize:layoutMetrics:` と `initWithOptions:layoutMetrics:estimated:` の上位呼出元からmetrics生成元を追う。
+
+## 2026-10-23 — componentごとのcallsite実測
+- T1Twitter実命令でstub `0x1359540`への13箇所にcomponent 0〜12が1件ずつ渡されることを確認。**bio=4は`0x483D8C`**で`mov w2,#4`直後にBL、`x3=x19`。
+- 13件は複数関数にまたがる。前回の「全部同一`sizeThatFitsHelper`メソッド内」という推定は誤りとして訂正した。[詳細](OfficialXResearch/T1UserViewBioCaller20261023.md)。
+- 次は`0x483D8C`の関数境界・x19の生成元を追う。
