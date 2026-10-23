@@ -125,3 +125,8 @@
 - 認証付きAPIへのHTTP redirectは拒否。artifactの署名付き配信URLにはPATを送らない。コード・debの公開APTなし。
 - 実装 commits `e91f00001ccff6959d9be0901e3e0b4cda96d2ab`, `ec28df51c546b0f51b2a02b75d9f16048c0150e5`; [設置ガイド](https://github.com/Botanium-git/SCARLET-X-Probe/blob/develop/tools/PRIVATE_UPDATER.md)。
 - **未検証:** SEのPython3/dpkgコマンド有無、実ダウンロード、Sileoインストール、ワンタップShortcut、v0.1.12のActionsビルド・実機。次はSEで`command -v python3 dpkg-deb dpkg-query dpkg`等を確認してから実行試験。初期実装は実行毎にtoken入力が必要。
+
+## 2026-10-24 — Private updater: validated deb → Filza staging automation
+- `SCARLET-X-Probe/develop/tools/private_probe_update.py` now stages validated new .deb into `/rootfs/var/mobile/Media/Downloads` after saving locally, for Filza handoff. This exact rootfs directory was confirmed visible in Filza on SE using a test file; previous standard RootHide /var/mobile and /var/mobile/Media paths were not shared.
+- Commit `4f1c108023345709e22c5961cda5a47fc8f01891`; guide `58e6c6fcc6b209bca022056e21ca14083def2f2b`.
+- User reports Filza installing the .deb and Sileo displaying Probe version. Remaining: secure Keychain-backed token persistence and one-action launcher; neither is yet implemented, do not call this a completed one-tap update. Before designing home screen launcher, verify device-side OpenSSH/Shortcuts or implement an SX UI Keychain helper. Do not store PAT in cleartext scripts or Shortcut action.
