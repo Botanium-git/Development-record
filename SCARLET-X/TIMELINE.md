@@ -44,3 +44,10 @@
 - 修正: 年表の旧台帳リンクを移管先に変更。Development-recordの入口・運用方針、解析ツールREADME内の古いリンクを整理。
 - 留保: リポジトリ全ファイルの再帰的な一覧比較を完了したわけではない。確認済み対象以外に資料が残っていないとまでは断定しない。
 - 次: 両ブランチの残存ファイル・参照整合を引き続き点検。開発の節目には本年表と必要な状態・解析資料を更新。
+
+### 2026-10-23 — 公式Xプロフィールbioレイアウト所有クラスの確定
+- 対象: 公式X v12.25 IPA内`T1Twitter`、SQLite索引。Scarlet X本体・Probeコード変更なし。
+- 方法: `bioLabelFrame`のmethod list `0x13E7490`からMach-O Objective-C class_roとクラス名ポインタを直接照合。
+- **確認済み:** 所有クラスは`T1UserViewLayoutState`（class `0x1AF2688`, class_ro `0x19ABE10`, 51 methods）。[調査の根拠](OfficialXResearch/ProfileBioLayoutOwner20261023.md)。
+- **未確認:** レイアウト値の生成・最終適用・実機測定。ビルド／実機検証は今回対象外。
+- 次: `applyToUserView:` と `setBioLabelFrame:` の利用経路を追う。
