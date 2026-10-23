@@ -105,3 +105,8 @@
 - 提供X v12.25 IPAのARM64命令を再確認。bio size callback `0x483D40` はCGSizeを返し、frame listener `0x483DC0` はsetterへtail Bする2命令で計算式なし。TFN block型情報にもCGSize/TFNLayoutMetrics、CGRect引数が存在。
 - **未確定**: 指定blockへの型情報の最終紐付け、TFNエンジン内部のCGSize→CGRect変換、親レイアウト制約・spacingの数値、実機条件。
 - [詳細](OfficialXResearch/TFNFlexibleBioCallbackABI20261023.md)。Scarlet X/Probe変更なし。
+
+### 2026-10-23 — Probe v0.1.12プロフィールクラス拡張
+- GitHub developの現行ファイルをSHA確認して編集。既存投稿4クラスを残しプロフィール6クラスを追加、存在チェックと記録件数の母数を10に修正。
+- ProbePanel.m commit 61a99358cc9249eb0ea4fbafc7e1dea0c26bfc8e。control commit cd01b5fdb19c2609ea59b3d033ae5e45167c0d1c。Tweak.xm commit 62acee60c2e04a2df5a4f47e554c09f06349b016。
+- ソース再取得で変更内容と既存Drive/手動操作を確認。Build/SE実機の成功は未確認。Scarlet Xアプリ本体とProbe/mainは未変更。
