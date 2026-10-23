@@ -95,3 +95,8 @@
 - X v12.25 T1Twitter `0x483D40..0x483DC4`実命令確認。`0x483D6C`は`tfn_flexibleLayoutViewModel`、`0x483D8C`でcomponent=4を`sizeForComponent:withSize:layoutMetrics:`へ送る。x19は関数第3引数x2。
 - `0x483C58`で`0x483DC0`をblock invoke pointerへ設定し、`0x483DC0`は`setBioLabelFrame:`へのtail B (`0x1337B60`)。以前のBL検索では拾えなかった経路。保持・実行条件、CGRect値は未確定。
 - [詳細](OfficialXResearch/T1UserViewBioCaller20261023.md)。Scarlet X本体/Probe変更なし。
+
+### 2026-10-23 — flexible layout bio計測とframe listenerの両登録を解決
+- T1Twitter実バイナリで`0x1365180`=`tfn_withFlexibleLayoutSizeCalculator:`、`0x1365140`=`tfn_withFlexibleLayoutFrameListener:`を解決。
+- size block`0x1882490`のinvokeは`0x483D40` (component4→bio計測)、frame listenerのinvokeは`0x483DC0` (`setBioLabelFrame:`)。`0x483C58`で両者登録を確認。
+- 計算サイズからCGRectへの変換・layoutMetrics生成元は未確定。[詳細](OfficialXResearch/T1UserViewBioCaller20261023.md)。本体/Probe変更なし。
