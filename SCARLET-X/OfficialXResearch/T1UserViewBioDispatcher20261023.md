@@ -17,3 +17,9 @@ OfficialXTextSizingDisassembly.md の OX-020/021 は主に投稿本文の TTASta
 bio case selector stubの正確な割当て、上位caller、layoutMetrics生成元、bioCGSizeとbioLabelFrameの接続、UIFont実数値、X v12.35実機での採用は未確定。
 次にjump tableを復元し、その後上位callerの引数を追う。
 Scarlet X本体・Probeは変更しない。
+## 追加確認：bio component番号を確定
+- 元Mach-Oの`__TEXT` VM `0x144DEE1`にある13バイトのjump tableを実読取り: `00 40 28 30 10 48 54 38 64 20 5c 08 18`。各値×4をbranch base `0x141698`へ加算。
+- **component=4** → branch `0x1416D8` → `BL 0x12C9780` (`0x1416F0`)。
+- stub `0x12C9780`のADRP/LDR → selref `0x1A9A7A8` → `_t1_sizeForBioWithOptions:size:layoutMetrics:cachedTextSizing:` と実バイトで解決。
+- これにより `T1UserView.sizeForDynamicComponent:withOptions:size:layoutMetrics:cachedTextSizing:` の**component=4がbioサイズ計測へ送られる**ことを確認。
+- この経路はx3=layoutMetrics、x4=cachedTextSizing、v0/v1=sizeを保持してbioメソッドへ渡す。上位callerがcomponent=4を使う画面条件とlayoutMetrics生成元は依然未確認。
