@@ -90,3 +90,8 @@
 - `0x483D8C`で`mov w2,#4`→`sizeForComponent:withSize:layoutMetrics:`を実命令確認。`0x4835C8..0x484D38`の13件がcomponent 0〜12をそれぞれ受け持つ。
 - **訂正:** 13件は個別の関数にまたがるため、1つの`sizeThatFitsHelper:`所有メソッドへ全件帰属する前の説明は不正確だった。[証拠](OfficialXResearch/T1UserViewBioCaller20261023.md)。
 - 端末・アプリ本体・Probeは変更なし。
+
+### 2026-10-23 — bio helperからsetter blockまでの静的接続候補
+- X v12.25 T1Twitter `0x483D40..0x483DC4`実命令確認。`0x483D6C`は`tfn_flexibleLayoutViewModel`、`0x483D8C`でcomponent=4を`sizeForComponent:withSize:layoutMetrics:`へ送る。x19は関数第3引数x2。
+- `0x483C58`で`0x483DC0`をblock invoke pointerへ設定し、`0x483DC0`は`setBioLabelFrame:`へのtail B (`0x1337B60`)。以前のBL検索では拾えなかった経路。保持・実行条件、CGRect値は未確定。
+- [詳細](OfficialXResearch/T1UserViewBioCaller20261023.md)。Scarlet X本体/Probe変更なし。
