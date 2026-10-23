@@ -97,3 +97,9 @@
 - T1Twitter実命令でstub `0x1359540`への13箇所にcomponent 0〜12が1件ずつ渡されることを確認。**bio=4は`0x483D8C`**で`mov w2,#4`直後にBL、`x3=x19`。
 - 13件は複数関数にまたがる。前回の「全部同一`sizeThatFitsHelper`メソッド内」という推定は誤りとして訂正した。[詳細](OfficialXResearch/T1UserViewBioCaller20261023.md)。
 - 次は`0x483D8C`の関数境界・x19の生成元を追う。
+
+## 2026-10-23 — bio helper関数入口とsetter blockを実バイナリ確認
+- bioサイズ計測の関数入口は`0x483D40`。第3引数x2をx19に保持し、`tfn_flexibleLayoutViewModel` (`0x1363600`)の戻り値へ`sizeForComponent:withSize:layoutMetrics:`をcomponent=4で送る (`0x483D8C`)。
+- 近傍`0x483DC0`はcaptured object `+0x20`に対して`setBioLabelFrame:` stubへ**B（tail branch）**。`0x483C58`の別関数がこのinvoke pointerをブロック様構造へ格納する。以前のBLだけのcaller検索ではこの経路を検出できない。
+- **未確定:** block実行順、CGRect算出、x2 metricsの上位生成元、runtimeでの採用。
+- [証拠](OfficialXResearch/T1UserViewBioCaller20261023.md)。次はblock登録メソッド`0x1365140`のselector解決と上位caller追跡。
