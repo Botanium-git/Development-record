@@ -73,3 +73,7 @@
 - 公式X v12.25 T1Twitterに `_t1_sizeForBioWithOptions:size:layoutMetrics:cachedTextSizing:`（IMP `0x141CD8`、method list `0x1393E10`）がある。username/fullname等のサイズ計測メソッドと同一リスト。
 - [一次証拠と未確定部分](OfficialXResearch/BioSizingAlternative20261023.md)。所有クラス、bio CGRectとの接続、計測アルゴリズムは未特定。
 - SE不要の次作業: 所有クラス特定→呼出スタブ解決→profile側layoutStateへの接続検証。
+
+## 2026-10-23 — bioフォントの分岐を命令確認
+- `T1UserViewBuildTextModel`はlayout metricsの`metricsFont`を優先し、nil時に限り`xds_body` fallback。`lineHeight`は同じmetricsから別途取得。ソース: [T1UserViewFontFallback20261023.md](OfficialXResearch/T1UserViewFontFallback20261023.md)。
+- 次: fallback受信クラスのchained fixup解析、layout metrics生成元、bio CGSize→CGRectの伝搬経路。
