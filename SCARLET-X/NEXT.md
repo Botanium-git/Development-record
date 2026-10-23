@@ -51,3 +51,9 @@
 - SEが使えるときに、v12.35の `T1ProfileUserInfoView` 等の存在・メソッドを限定的に照合する。現在のProbeの固定4クラスは投稿セル寄りなので自己紹介欄の証明には使えない。
 - 実測する候補: bioビューの実クラス、font/pointSize、bounds/frame、表示条件とsafe area。投稿本文やユーザーのプロフィール文字列は採取しない。
 - Scarlet Xの本番UIには、この調査だけを根拠に変更を加えない。
+
+## 2026-10-23 — bioLabelFrame所有クラスを実バイナリで確定
+- **確認済み:** 公式X v12.25の`T1Twitter`内で、`bioLabelFrame` と同一51メソッド群を持つ所有クラスは `T1UserViewLayoutState`。class `0x1AF2688`、class_ro `0x19ABE10`、methods `0x13E7490`。
+- [実バイト根拠・手順](OfficialXResearch/ProfileBioLayoutOwner20261023.md)。
+- **未確定:** `applyToUserView:` での適用先、`setBioLabelFrame:` の値の生成経路、公式Xの自己紹介欄の実測CGRect・フォント・幅・高さ。SE実行版はv12.35で静的資料とバージョン差がある。
+- **次:** 上記2メソッドの呼出関係を限定して追う。Scarlet Xの表示コードは根拠が確定するまで変更しない。
