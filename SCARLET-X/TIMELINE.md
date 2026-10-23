@@ -85,3 +85,8 @@
 - X v12.25 T1Twitterのselector参照（`0x1ABE738`）からstub `0x13595C0`を解決。direct BL `0x2526D8`を確認。
 - 呼出元は `T1UserViewLayoutParameters.sizeForComponent:withSize:layoutMetrics:`（IMP `0x252654`）。layoutMetricsはこの呼出元のx3からx4へ伝搬。method list `0x13E7400` とclass_ro `0x1988298`によりクラス所有を確認。
 - 生成元・通常プロフィールへの実際の利用、bio CGSize→CGRect経路は未確定。[記録](OfficialXResearch/T1UserViewBioCaller20261023.md)。Scarlet X/Probe変更・ビルド・実機検証なし。
+
+### 2026-10-23 — bio component 4 callsite確定・関数境界誤認訂正
+- `0x483D8C`で`mov w2,#4`→`sizeForComponent:withSize:layoutMetrics:`を実命令確認。`0x4835C8..0x484D38`の13件がcomponent 0〜12をそれぞれ受け持つ。
+- **訂正:** 13件は個別の関数にまたがるため、1つの`sizeThatFitsHelper:`所有メソッドへ全件帰属する前の説明は不正確だった。[証拠](OfficialXResearch/T1UserViewBioCaller20261023.md)。
+- 端末・アプリ本体・Probeは変更なし。
