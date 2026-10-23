@@ -80,3 +80,8 @@
 ### 2026-10-23 — T1UserView bio component=4を実命令から確定
 - X v12.25 T1Twitterのジャンプテーブル `0x144DEE1` を実バイト読取り。component4→`0x1416D8`→ObjC stub `0x12C9780`→`_t1_sizeForBioWithOptions:size:layoutMetrics:cachedTextSizing:`をselrefで確認。
 - 既存OX-020/021は投稿本文側の解析として参照し、bioと同じレイアウト規則と断定しない。[証拠](OfficialXResearch/T1UserViewBioDispatcher20261023.md)。本体・Probe変更なし。
+
+### 2026-10-23 — bioサイズ計測callerを特定
+- X v12.25 T1Twitterのselector参照（`0x1ABE738`）からstub `0x13595C0`を解決。direct BL `0x2526D8`を確認。
+- 呼出元は `T1UserViewLayoutParameters.sizeForComponent:withSize:layoutMetrics:`（IMP `0x252654`）。layoutMetricsはこの呼出元のx3からx4へ伝搬。method list `0x13E7400` とclass_ro `0x1988298`によりクラス所有を確認。
+- 生成元・通常プロフィールへの実際の利用、bio CGSize→CGRect経路は未確定。[記録](OfficialXResearch/T1UserViewBioCaller20261023.md)。Scarlet X/Probe変更・ビルド・実機検証なし。
