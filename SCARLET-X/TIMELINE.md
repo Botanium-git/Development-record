@@ -63,3 +63,8 @@
 - 公式X v12.25 `T1Twitter`のARM64実命令を走査。 `setBioLabelFrame:` stub `0x1337B60` とIMP `0x3AFDE8`への直接BLはいずれも0件。getterへは1件で、既出のapply経路と一致。
 - **未確定:** 動的ObjC呼出、他framework、直接ivar書込、値の計算元。
 - [詳細](OfficialXResearch/ProfileBioSetterCallers20261023.md)。SCARLET-X・Probeコード変更なし。
+
+### 2026-10-23 — SE不使用の追加静的解析
+- 公式X v12.25 IPA実物、SQLite `objc_methods`、ARM64命令を確認。
+- `_t1_sizeForBioWithOptions:size:layoutMetrics:cachedTextSizing:`（IMP `0x141CD8`）が、username/fullname等の計測APIと同一method listにあることを確認。
+- 画面ごとの利用先、所有クラス、bio CGRectの計算規則は未確定。[詳細](OfficialXResearch/BioSizingAlternative20261023.md)。SCARLET-X/Probeのコード変更なし。
