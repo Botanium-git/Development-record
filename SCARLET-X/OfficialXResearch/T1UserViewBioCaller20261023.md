@@ -69,3 +69,10 @@ At calls to stub `0x1359540` the immediate component argument `w2` is:
 - **重要:** setter側のスタブに対する通常BLがゼロでも、block invokeからtail branch（B）する呼出経路が存在する。これが以前のBLのみの検索で拾えなかった理由の一つ。
 - 以上によりbio計測経路と`setBioLabelFrame:`のblock化処理が近接し、共通のレイアウト実装群にあることを実証。ただし **個別のblockがどの条件・順番で実行され、得たCGSizeがどのCGRect座標へ変換されるかは未確定**。画面ごとのruntime採用・v12.35の同一性も未確認。
 - 次: `0x1365140` のObjC selectorとblock保持先、`0x483C58`のowner/呼出元、x2で渡るmetricsの生成元を追う。アプリ・Probeは未変更。
+## 2026-10-23: flexible layout block registration confirmed
+- Read the original X v12.25 T1Twitter Mach-O directly (llvm-objdump at 0x483C58..0x483DC4). ObjC stub `0x1365180` uses selref `0x1AC1628` → `tfn_withFlexibleLayoutSizeCalculator:`; invoked at `0x483C88`. Its argument x2 points to const data `0x1882490`, consistent with a size-calculator block object.
+- Stub `0x1365140` uses selref `0x1AC1618` → `tfn_withFlexibleLayoutFrameListener:`; invoked at `0x483CD8`. Argument x2 points to the stack block formed at sp+8; its invoke address is `0x483DC0` and captured receiver is loaded from block+0x20. The invoke branches to the `setBioLabelFrame:` ObjC stub `0x1337B60`.
+- Stub `0x13651A0` uses selref `0x1AC1630` → `tfn_withFlexibleLayoutSpacing:`; invoked at `0x483CF8` using four doubles loaded from a constant pointer.
+- At `0x483C58`, x2 is stored to x20 and used as receiver of `tfn_withFlexibleLayoutSizeCalculator:`, x3 is retained x19 and captured in the frame listener. This establishes **registration of a size calculator and a frame listener** in one function; it does not prove the runtime execution order or that the listener's input CGRect equals the size calculator output without transformation.
+- The nearby size callback at `0x483D40` takes x1=model and x2=metrics, calls `tfn_flexibleLayoutViewModel` on model, and sends component=4 `sizeForComponent:withSize:layoutMetrics:`. The connection of this callback to the constant block at `0x1882490` still needs inspecting that block's invoke pointer.
+- Prior reports: OX-020/OX-021 concern status text, not necessarily bio. No SCARLET-X/Probe code change.
