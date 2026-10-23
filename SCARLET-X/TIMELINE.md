@@ -58,3 +58,8 @@
 - クラス所有者: `T1UserRecommendationViewLayoutDelegate` → `T1UserRecommendationViewLayoutState`。
 - **重要:** これはユーザーおすすめビュー用。通常プロフィールの `T1UserViewLayoutState.bioLabelFrame` との関連は未確認。類似名による取り違えを避ける。
 - 根拠: [ProfileBioFrameProducer20261023.md](OfficialXResearch/ProfileBioFrameProducer20261023.md)。次は通常プロフィール側 `setBioLabelFrame:` の呼出元を追う。
+
+### 2026-10-23 — 通常プロフィールbio setterの直接BL探索
+- 公式X v12.25 `T1Twitter`のARM64実命令を走査。 `setBioLabelFrame:` stub `0x1337B60` とIMP `0x3AFDE8`への直接BLはいずれも0件。getterへは1件で、既出のapply経路と一致。
+- **未確定:** 動的ObjC呼出、他framework、直接ivar書込、値の計算元。
+- [詳細](OfficialXResearch/ProfileBioSetterCallers20261023.md)。SCARLET-X・Probeコード変更なし。
