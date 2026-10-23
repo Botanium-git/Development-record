@@ -119,3 +119,9 @@
 - control/Tweak.xmを0.1.12へ更新。最終コミット62acee60c2e04a2df5a4f47e554c09f06349b016。main変更なし。
 - 未確認: Actionsビルド、SE実機導入、X v12.35でのクラス/メソッド、CGRect/フォントの実測。
 - 次: Actionsビルド確認後、SEでSX→クラスメソッド情報を記録→診断JSONをDriveへ送信。メソッド存在確認後に限定CGRect計測を検討。
+
+## 2026-10-23 — private Probe updater MVP 実装（SE未検証）
+- SCARLET-X-Probe/developに `tools/private_probe_update.py` を追加。GitHub fine-grained PATを実行時に非表示入力、Actions-readで成功したdevelop push buildを取得、ZIP内deb一件・パッケージID・arm64e architecture・既存バージョン超過・dylib/plist存在を確認後、`~/Documents/SXProbeUpdates/`に保存。rootでの自動インストールなし。
+- 認証付きAPIへのHTTP redirectは拒否。artifactの署名付き配信URLにはPATを送らない。コード・debの公開APTなし。
+- 実装 commits `e91f00001ccff6959d9be0901e3e0b4cda96d2ab`, `ec28df51c546b0f51b2a02b75d9f16048c0150e5`; [設置ガイド](https://github.com/Botanium-git/SCARLET-X-Probe/blob/develop/tools/PRIVATE_UPDATER.md)。
+- **未検証:** SEのPython3/dpkgコマンド有無、実ダウンロード、Sileoインストール、ワンタップShortcut、v0.1.12のActionsビルド・実機。次はSEで`command -v python3 dpkg-deb dpkg-query dpkg`等を確認してから実行試験。初期実装は実行毎にtoken入力が必要。
