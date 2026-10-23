@@ -113,3 +113,9 @@
 - v12.25 `T1Twitter` のsize callback `0x483D40`はcomponent4の計測結果（v0/v1 CGSize相当）を返す。frame listener `0x483DC0`は受け取ったframeを加工せず`setBioLabelFrame:`へtail branchで転送。
 - flexible layout関連の型文字列に`TFNLayoutMetrics`、`CGSize`、`CGRect`を確認。ただし文字列と当該callbackを1対1対応させるblock descriptorは未確認。
 - [根拠](OfficialXResearch/TFNFlexibleBioCallbackABI20261023.md)。次はTFNエンジン実装モジュール、配置のorigin/spacing計算、metrics作成元を特定する。
+
+## 2026-10-23 — SE再開時のProbe v0.1.12検証
+- SCARLET-X-Probe/develop: ProbePanel.mに既存4クラスを保ったまま T1UserView, T1UserViewLayoutParameters, T1UserViewLayoutState, T1ProfileUserInfoView, T1ProfileHeaderView, T1ProfileUserInfoViewController の6クラスを追加し、10クラスを読み取り専用で記録するよう変更。
+- control/Tweak.xmを0.1.12へ更新。最終コミット62acee60c2e04a2df5a4f47e554c09f06349b016。main変更なし。
+- 未確認: Actionsビルド、SE実機導入、X v12.35でのクラス/メソッド、CGRect/フォントの実測。
+- 次: Actionsビルド確認後、SEでSX→クラスメソッド情報を記録→診断JSONをDriveへ送信。メソッド存在確認後に限定CGRect計測を検討。
