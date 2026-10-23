@@ -26,7 +26,7 @@ python3 ResearchTools/macho_db_search.py --db /path/to/scarlet_macho.sqlite --qu
 
 ## 調査結果の保存
 
-- 入口: [Diagnostics/README.md](../Diagnostics/README.md)
+- 入口: [Scarlet X側の診断・解析索引](https://github.com/Botanium-git/SCARLET-X/blob/develop/Diagnostics/README.md)
 - 証拠台帳: [https://github.com/Botanium-git/Development-record/blob/main/SCARLET-X/OfficialXResearch/OfficialXFindingsLedger.md](https://github.com/Botanium-git/Development-record/blob/main/SCARLET-X/OfficialXResearch/OfficialXFindingsLedger.md)
 - 不明な項目を憶測で確定せず、SQL/逆アセンブル/実機ログで出典を残す。
 
