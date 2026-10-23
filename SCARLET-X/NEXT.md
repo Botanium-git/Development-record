@@ -63,3 +63,8 @@
 - 計算結果を書き込む `setBioFrame:` は `T1UserRecommendationViewLayoutState` に属する。**通常プロフィール側の `T1UserViewLayoutState.setBioLabelFrame:` とは別経路**。
 - 解析証拠: [ProfileBioFrameProducer20261023.md](OfficialXResearch/ProfileBioFrameProducer20261023.md)。
 - 次は `T1UserViewLayoutState.setBioLabelFrame:` (`0x3AFDE8`) へのcallsite、またはCGRect格納域 `+0xD8`への直接書込みを調べる。プロフィールUIへの仮実装はまだ行わない。
+
+## 2026-10-23 — 通常プロフィールsetBioLabelFrame:直接呼出探索
+- v12.25 `T1Twitter`内の直接BL走査では `setBioLabelFrame:` stub `0x1337B60`およびIMP `0x3AFDE8`への直接呼出は0件。getter `bioLabelFrame`は `applyToUserView:`で1件検出。
+- [調査・限界](OfficialXResearch/ProfileBioSetterCallers20261023.md)。**objc_msgSend/他framework/直接ivar書込みは未除外**。
+- 次は他framework・レイアウト状態生成経路の探索。SE実機なら計測値取得が近道だが、Probe機能追加と複数条件検証が必要。
