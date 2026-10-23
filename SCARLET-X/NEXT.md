@@ -86,3 +86,9 @@
 ## 2026-10-23 — T1UserViewのbio component番号確定
 - 公式X v12.25実バイナリのbyte jump table `0x144DEE1`とObjC selrefを照合し、`sizeForDynamicComponent:withOptions:size:layoutMetrics:cachedTextSizing:`の**component=4が`_t1_sizeForBioWithOptions:size:layoutMetrics:cachedTextSizing:`へdispatch**されると確定。
 - [根拠](OfficialXResearch/T1UserViewBioDispatcher20261023.md)。次は共通dispatcherの上位callerとlayoutMetrics生成元を追う。投稿本文のlayoutMetrics規則をbioに転用しない。
+
+## 2026-10-23 — bio計測の上位呼出元と所有クラス（実バイナリ検証）
+- `T1UserViewLayoutParameters.sizeForComponent:withSize:layoutMetrics:` IMP `0x252654` から `T1UserView.sizeForDynamicComponent:withOptions:size:layoutMetrics:cachedTextSizing:` ObjC stub `0x13595C0` を `0x2526D8` で呼ぶ。直接BLはT1Twitter内1件。
+- x3で受け取ったlayoutMetricsをx4へ渡す。component 4がbio計測へdispatchするのは前回確定済み。
+- method list `0x13E7400` の所有クラスはclass_roの実バイトで `T1UserViewLayoutParameters` と確認。
+- [詳細](OfficialXResearch/T1UserViewBioCaller20261023.md)。次は `sizeForComponent:withSize:layoutMetrics:` と `initWithOptions:layoutMetrics:estimated:` の上位呼出元からmetrics生成元を追う。
