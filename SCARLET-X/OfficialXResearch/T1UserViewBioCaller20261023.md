@@ -76,3 +76,9 @@ At calls to stub `0x1359540` the immediate component argument `w2` is:
 - At `0x483C58`, x2 is stored to x20 and used as receiver of `tfn_withFlexibleLayoutSizeCalculator:`, x3 is retained x19 and captured in the frame listener. This establishes **registration of a size calculator and a frame listener** in one function; it does not prove the runtime execution order or that the listener's input CGRect equals the size calculator output without transformation.
 - The nearby size callback at `0x483D40` takes x1=model and x2=metrics, calls `tfn_flexibleLayoutViewModel` on model, and sends component=4 `sizeForComponent:withSize:layoutMetrics:`. The connection of this callback to the constant block at `0x1882490` still needs inspecting that block's invoke pointer.
 - Prior reports: OX-020/OX-021 concern status text, not necessarily bio. No SCARLET-X/Probe code change.
+
+## 2026-10-23 — constant size-calculator block invoke verified
+- Actual T1Twitter bytes at VM `0x1882490`: four 64-bit words `0x80200000000037B9` (block isa chained bind), `0x50000000` (flags/reserved), `0x10000000483D40` (invoke pointer), `0x10000001876808` (descriptor pointer).
+- For the observed rebased pointer representation, the invoke target low 36 bits are **`0x483D40`**, exactly the bio component=4 callback identified above.
+- **Static connection established:** `0x483C88 tfn_withFlexibleLayoutSizeCalculator:` registers block at `0x1882490` whose invoke is `0x483D40` → `tfn_flexibleLayoutViewModel` → component 4 `sizeForComponent:withSize:layoutMetrics:`; separately `0x483CD8 tfn_withFlexibleLayoutFrameListener:` registers a stack block whose invoke `0x483DC0` tail-dispatches `setBioLabelFrame:`.
+- This confirms the two callbacks are assembled and registered together in `0x483C58`. Remaining uncertainties: how the flexible-layout engine schedules them, coordinate conversion/CGRect origin, layoutMetrics generation upstream, runtime v12.35 use.
