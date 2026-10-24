@@ -141,3 +141,8 @@
 - User installed v0.1.13, entered token in new SX update panel and saw `ビルド確認済み` after pressing latest-build check. This is an actual device validation of Keychain token reuse and successful GitHub API workflow discovery; not validation of deb download or installation.
 - The following stage must download the private artifact and validate archive, package identity, architecture and versions before exposing to Filza's share/install UI. Keep a separate explicit installation confirmation; do not auto-install from the X process or log tokens.
 - No fully operational native deb downloader or install button has been verified yet. Python updater remains the known functional fallback.
+
+## 2026-10-24 — Probe 0.1.14: native private Actions ZIP retrieval (CI/device unverified)
+- User confirmed SE v0.1.13 update screen displays `ビルド確認済み` after Keychain token enrollment. GitHub auth and listing confirmed on-device.
+- On SCARLET-X-Probe/develop `ProbePrivateUpdate.m`, added separate `成果物ZIPを取得・共有` row: authenticated GitHub Actions artifact lookup, signed URL download without token, size cap and ZIP magic check, UIActivityViewController handoff to Filza. No root install. GitHub update commit `123c1ae1c042498c452d609b22eb4ea25a9b6b95`; version bumped to 0.1.14 via control `150b8ecd13176a1385bf8515a081a267e166b2a3` and Tweak marker `fc25d7362c2f5f0d78f1ee982c37c73df5273c54`.
+- **Important limitation:** It shares ZIP, not a validated extracted .deb. Native ZIP extraction and package ID/version verification NOT implemented. User must extract in Filza, inspect deb, explicitly install. Workflow build status and SE runtime not confirmed. Do not claim one-tap done; Python downloader remains known validated path.
