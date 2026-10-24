@@ -120,3 +120,9 @@
 - SE実機からGitHub API認証、非公開Actions artifact取得成功（workflow run 39966745960）。「Unexpected package identity or architecture」でインストール前検証停止、既存Probe不変。
 - `dpkg-deb -f <deb> Package Version Architecture`が各行に`Package: `等のラベルを付ける挙動を再現し、ダウンローダーのパーサー欠陥と確認。単独値として扱っていたのが原因。
 - `SCARLET-X-Probe/develop/tools/private_probe_update.py`をラベル除去処理へ修正（commit `da151391de685d12826305947a9fa23d94ce841e`）。SE実行は未検証、更新前のProbeへ手を触れず。
+
+## 2026-10-24 — Probe v0.1.13 更新画面第1段階（未検証）
+- `SCARLET-X-Probe/develop` に新規 `ProbePrivateUpdate.m`。既存の `ProbePanel.m` 第3セクション末尾へ「Probe更新（準備中）」を追加、Keychainのトークン登録・削除、およびAPIを使った成功済みdevelop pushビルド確認機能だけを追加。元の診断/Driveフローは維持。
+- `Makefile` に追加ソース登録、`control` と `Tweak.xm` を **0.1.13** に更新。Github API認証つき要求はredirect拒否。
+- **未実装:** native deb download/ZIP extraction/package validation、Filzaへの受け渡し、ホーム画面1タップ起動、実際のインストール。Python updater は別に残す。**未検証:** Actionsビルド、SE Keychain、API認証実行、UI表示。最初にCIを確認してから実機試験すること。
+- **注意:** Probeは公式Xのプロセス内で動くので、GitHubトークンのKeychainはそのアプリ実効IDに属する。Keychain保存は平文ファイルより良いがXや同じプロセス内のコードから絶対に隔離されることを意味しない。必要最小権限・短期失効を守ること。
