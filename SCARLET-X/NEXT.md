@@ -136,3 +136,8 @@
 - `Makefile` に追加ソース登録、`control` と `Tweak.xm` を **0.1.13** に更新。Github API認証つき要求はredirect拒否。
 - **未実装:** native deb download/ZIP extraction/package validation、Filzaへの受け渡し、ホーム画面1タップ起動、実際のインストール。Python updater は別に残す。**未検証:** Actionsビルド、SE Keychain、API認証実行、UI表示。最初にCIを確認してから実機試験すること。
 - **注意:** Probeは公式Xのプロセス内で動くので、GitHubトークンのKeychainはそのアプリ実効IDに属する。Keychain保存は平文ファイルより良いがXや同じプロセス内のコードから絶対に隔離されることを意味しない。必要最小権限・短期失効を守ること。
+
+## 2026-10-24 — SE validates Probe 0.1.13 native GitHub authentication
+- User installed v0.1.13, entered token in new SX update panel and saw `ビルド確認済み` after pressing latest-build check. This is an actual device validation of Keychain token reuse and successful GitHub API workflow discovery; not validation of deb download or installation.
+- The following stage must download the private artifact and validate archive, package identity, architecture and versions before exposing to Filza's share/install UI. Keep a separate explicit installation confirmation; do not auto-install from the X process or log tokens.
+- No fully operational native deb downloader or install button has been verified yet. Python updater remains the known functional fallback.
