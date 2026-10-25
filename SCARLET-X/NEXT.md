@@ -319,3 +319,9 @@
 - Previous `ProbePanel.m` commit `e8c8af46dec8083e82b13923fb369dbb807fcbda` added manual `profile-bio-rendered-metrics`, intended to capture rendered bio typography attributes (without body text) via verified profile bio view/model path. This code is not yet proven by a successful build or device run.
 - Version synchronization was retried successfully. `control`: `365a80fe1d539323c0b300931c6d9c0e915d8f58`; `ProbePrivateUpdate.m`: `0b293464bea0d24ba95aa4e638378cc12964d518`; `Tweak.xm`: `c6c0350c15ab8a0ef3c0c578c46a330d145ee1d0`. Re-fetched each on `develop`: contains 0.1.36, no 0.1.35 occurrences.
 - Workflow status NOT confirmed: commit-run connector only lists PR-triggered runs, returning zero for the tip; this is not a proof of build success/failure. Check GitHub Actions explicitly before installing. No device measurements from v0.1.36 yet. Main Scarlet X unchanged.
+
+## 2026-10-25 — SXP v0.1.36 compile failure fixed in v0.1.37
+- User-provided GitHub Actions screenshot: `Build RootHide package` failed in `ProbePanel.m:621` with four instances of `property 'frame' not found on object of type '__strong id'`, all caused by accessing `label.frame` on an `id` variable in `profile-bio-rendered-metrics`. This is a confirmed compiler error, not a runtime diagnosis.
+- Minimal source fix: after verifying `label` is `TFNAttributedTextView` (UIView subclass), take `CGRect bioFrame=((UIView *)label).frame;` and use `bioFrame` coordinates instead. ProbePanel.m commit `36028ad777fae2b1ff61c9ab56dc8f80ec76538e`.
+- Bump per-version change to v0.1.37: control `a7ab7ea058e2e34bc06a9db3eafde9db0456ccb7`, ProbePrivateUpdate.m `377a106925e82a82bc0a5cf9706297e15b0f6a97`, Tweak.xm `3ddcb79258672d02b89a925b7d8073e39c1ce013`.
+- Build of v0.1.37 remains UNVERIFIED; do not equate commit with successful compilation. Need inspect Actions and on-device behavior. Main Scarlet X untouched.
