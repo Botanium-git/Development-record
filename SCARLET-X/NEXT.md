@@ -262,3 +262,9 @@
 - Same selector list includes `fullNameFont`, `usernameFont`, `bannerImageRatio`, `badgeImageSize`, `edgePadding` and related layout selectors. It is a candidate appearance/layout configuration class, but declaring class is NOT established.
 - The SQLite schema has no class ownership mapping. Raw 64-bit pointer search for `list_address` in Mach-O found zero literal pointers, so Objective-C metadata / chained fixups must be interpreted; do not infer class identity.
 - On X 12.35, SXP v0.1.32 failed to locate instance `bioFont` on the three previously selected view classes. No SXP release change from this static investigation.
+
+## 2026-10-25 — X 12.25 bioFont declaring class RESOLVED
+- Reopened user-provided X 12.25 IPA `Payload/Twitter.app/Frameworks/T1Twitter.framework/T1Twitter` and cross-checked `scarlet_macho(1).sqlite` method index.
+- `bioFont` method list address `0x1393D48` resolves through ObjC class_ro_t `baseMethods` pointer at `0x1972590` (class_ro_t begins `0x1972570`). Its name pointer at `0x1972588` resolves to **`T1UserRecommendationViewLayoutSpec`**. The direct Mach-O bytes and 12.25 static index agree.
+- This is a user-recommendation-view layout spec class; it is NOT proof of profile-detail (`T1ProfileUserInfoView`) bio typography. Prior SXP v0.1.32 checks against three view classes were not tests of the actual owner class. No confirmed font or line spacing value for the profile-detail screen.
+- Next: avoid blindly using `bioFont` from recommendation UI. Prioritize `T1ProfileUserInfoView`'s `updateFontSize` and actual rendering path or obtain a corresponding 12.35 binary to inspect. No SXP code changes in this static analysis.
