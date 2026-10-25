@@ -390,3 +390,10 @@
 - Two Drive captures 145829 and 145845 agree: S, `.SFUI-Regular` 13pt, UIFont lineHeight 15.513671875, 292x76pt, four model lines lengths 21/25/24/19.
 - Previous XS plus bold ON: `.SFUI-Semibold` 12pt, lineHeight 14.3203125, 292x71pt, four model lines lengths 21/25/26/17.
 - Different weight and size changed together, so each effect not isolated. Next compare S with bold ON, keeping other variables fixed. Do not hardcode results in Scarlet X.
+
+## 2026-10-25 — SXP v0.1.42 Core Text line widths validated
+- Official X 12.35, first-gen iPhone SE 320x568pt, Bold Text OFF, same visible profile bio. Drive files: `SXProbe_2026-10-25_193211.json` (S), `SXProbe_2026-10-25_193244.json` (M).
+- S: category S, .SFUI-Regular 13pt, requestedSize 302x3000, CTLine typographic widths [154.7307597089862, 267.0748755773503, 291.8615528531338, 211.87319669375586]. ceil(max)=292 equals actualSize.width 292 equals bioFrame.width 292; height76, four lines.
+- M: category M, .SFUI-Regular 14pt, requestedSize 302x3000, CTLine widths [165.60773521544667, 287.20894052560806, 301.2160898035547, 240.87430754501872]. ceil(max)=302 equals actualSize.width 302 equals bioFrame.width 302; height80, four lines. This log contains two identical M snapshots.
+- Thus prior v12.25 static OX-012 rule `actualWidth=ceil(max CTLineGetTypographicBounds width)` precisely matches v12.35 observed bio for both controlled samples. Width change 292->302 is attributable to content fitting within same requested width, NOT a change in requested layout width. This validates two examples, not global equivalence for arbitrary text/devices.
+- Height derivation from Core Text origins/ascent/descent plus 3px (OX-012) NOT yet validated live. Scarlet X production unchanged. Next investigate line origins/metrics and compare 76/80; preserve existing functionality.
