@@ -256,3 +256,9 @@
 - Received `SXProbe_2026-10-25_121420.json` (official X 12.35; 157 retained events). New `profile-bio-font-candidates` occurred twice. Both reported `bioFont` instance selector absent for `T1ProfileUserInfoView`, `T1UserView` and `TFNAttributedTextView` (`exists=0`, empty type encoding, missing IMP). This excludes these specific instance-class paths on X 12.35, not other classes or class methods.
 - Existing bio setter observer remains installed and active; after-set typography getter checks remain unavailable. No confirmed profile bio font size, style, or paragraph line spacing. Do not treat other visible UILabel typography as bio typography.
 - Next: use older X 12.25 static index to identify the declaring class of `bioFont` before further runtime inspection; do not add blind getter invocations. No SXP source change and no version bump from v0.1.32 for this result.
+
+## 2026-10-25 — X 12.25 static bioFont method-list follow-up
+- Checked supplied `scarlet_macho(1).sqlite` and original X 12.25 IPA `T1Twitter` Mach-O. SQLite `objc_methods`: sole `bioFont` selector record binary_id=1, types=`@16@0:8`, imp=1841156, list_address=20528456, entry_index=3.
+- Same selector list includes `fullNameFont`, `usernameFont`, `bannerImageRatio`, `badgeImageSize`, `edgePadding` and related layout selectors. It is a candidate appearance/layout configuration class, but declaring class is NOT established.
+- The SQLite schema has no class ownership mapping. Raw 64-bit pointer search for `list_address` in Mach-O found zero literal pointers, so Objective-C metadata / chained fixups must be interpreted; do not infer class identity.
+- On X 12.35, SXP v0.1.32 failed to locate instance `bioFont` on the three previously selected view classes. No SXP release change from this static investigation.
