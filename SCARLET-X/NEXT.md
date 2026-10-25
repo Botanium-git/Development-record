@@ -384,3 +384,9 @@
 - `T1ProfileUserInfoView.updateFontSize` method exists with encoding `v16@0:8`, its implementation image is official `T1Twitter`, not SXP. `T1ProfileHeaderView.tfn_fontSizeChanged` also points at T1Twitter. `TFNAttributedTextView.tfn_fontSizeChanged` implementation is XServiceLibraries. Observed method ownership only; NO call graph proven.
 - Same capture `profile-bio-rendered-metrics` remains unchanged at `.SFUI-Semibold` 12pt, UIFont lineHeight 14.3203125, frame and actualSize 292×71pt, 4 lines, 0pt model top/bottom padding. **XS is a meaningful new input**, but one paired measurement cannot prove whether a Dynamic Type category adjustment or viewport-width transform generated 12pt.
 - Next controlled test WITHOUT code updates: temporarily change the official X in-app display text-size setting by exactly one step (if available) on SE; rerun SXP v0.1.39 while keeping the bio and viewport unchanged. Compare contentSizeCategory and bio font pointSize, fontName, actualSize/lineCount. Note that X in-app text-size slider may not change UIKit preferredContentSizeCategory; lack of change to that property is not by itself evidence of static font sizing. Restore original setting afterward. Do not make fixed 12pt or 14pt implementation changes to Scarlet X.
+
+## 2026-10-25 SE font-size/bold comparison
+- User changed two variables: iOS text size XS to S and Bold Text ON to OFF. Official X12.35 on first-gen SE remains 320x568pt.
+- Two Drive captures 145829 and 145845 agree: S, `.SFUI-Regular` 13pt, UIFont lineHeight 15.513671875, 292x76pt, four model lines lengths 21/25/24/19.
+- Previous XS plus bold ON: `.SFUI-Semibold` 12pt, lineHeight 14.3203125, 292x71pt, four model lines lengths 21/25/26/17.
+- Different weight and size changed together, so each effect not isolated. Next compare S with bold ON, keeping other variables fixed. Do not hardcode results in Scarlet X.
