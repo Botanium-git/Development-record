@@ -274,3 +274,9 @@
 - v0.1.33 `ProbePanel.m` commit `5cf1fb8bd19e48f17c061a6c32fb24f067b212d9`: manual profile capture additionally emits `profile-typography-structure`, recording ABI of the two methods and class-declared ivar names/type encodings containing bio/font/text across the `T1ProfileUserInfoView` hierarchy. No private method invocation or ivar value access; keep existing hooks unchanged and do not capture text content in new event.
 - Version 0.1.33 commits: `control` de4c9f814c88f9990352f6942c2d8b2613795922; `ProbePrivateUpdate.m` c39a2a3d89bd2d6d21f960cac502aa08742b8fe2; `Tweak.xm` fe72c9d08f96d59c8b0b170b1ddcaed2ac03b645. Main Scarlet X unchanged.
 - Build and device behavior unverified. Next: check Actions, install 0.1.33, open one bio-bearing profile, tap manual profile measurement and send Drive JSON. Inspect `profile-typography-structure` before planning any value read.
+
+## 2026-10-25 — SXP v0.1.33 device result
+- Received Drive log `SXProbe_2026-10-25_132414.json`, xVersion 12.35, 200 entries (includes accumulated prior-session events; do not treat every entry as v0.1.33-only).
+- New `profile-typography-structure` event captured once: `T1ProfileUserInfoView.updateFontSize` exists, encoding `v16@0:8`; `_t1_setBioLabel:withText:entities:isUTF16Entities:` exists, encoding `v44@0:8@16@24@32B40`.
+- `T1ProfileUserInfoView` directly declares `_bioLabel` (`@\"TFNAttributedTextView\"`) and `_translatedBioLabel` (same type), plus `_bio` (`NSString`), `_bioEntities` (`TFSTwitterEntitySet`), and state fields. No `font`-named ivar was present in emitted matching set. `valuesRead=false`: neither UIFont nor paragraph styling confirmed.
+- Next diagnose `TFNAttributedTextView`'s own ivar/property metadata or trace concrete font setup in `T1ProfileUserInfoView.updateFontSize`; do not assume `_bioLabel` holds a directly readable UIFont. Keep scope read-only until ABI/type is confirmed.
