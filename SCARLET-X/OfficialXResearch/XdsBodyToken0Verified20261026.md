@@ -19,3 +19,14 @@ Official X v12.25 user-provided IPA, XServiceLibraries Mach-O (86,030,256 bytes)
 Reproduce: `llvm-objdump -d --start-address=0x36AFF4 --stop-address=0x36B014 XServiceLibraries.macho`; `llvm-objdump -d --start-address=0x369F0C --stop-address=0x369FF8 XServiceLibraries.macho`; inspect file byte at 0x302B018.
 
 No Scarlet X / SXP edit, build or device validation.
+
+## Same-session selector follow-up (original bytes)
+
+Decoding the adrp/ldr pair in each direct Objective-C stub and the chained selector pointer gives:
+- `0x2F54860` → `tfn_isChirpFontEnabled` (used in token0 branch `0x369F78`);
+- `0x2F54160` → `tfn_dynamicFontSizeOffsetBy:` (common processing at `0x369FEC`; d0 supplied from token-indexed double table, for token 0 the table lookup defaults to 0 because token−3 underflows unsigned range);
+- `0x2F24400` → `numberWithInteger:` (token identifier boxed at `0x36A000`);
+- `0x2F24760` → `objectForKeyedSubscript:` (cache lookups at `0x36A030` etc);
+- `0x2F54460` → `tfn_fontWithName:size:` (called after computed font-size in `0x36A088`).
+
+These direct stub identities strengthen the font-size path: token0 enters `fontForToken:`, which uses `tfn_dynamicFontSizeOffsetBy:` with **0** as its offset parameter and passes the returned size to `tfn_fontWithName:size:`. It is still unproven whether `tfn_dynamicFontSizeOffsetBy:` calls the archived baseline/category/window helper `0x244F2F4` or how its input default/base size is chosen. Do not claim full formula-to-Bio linkage yet.
