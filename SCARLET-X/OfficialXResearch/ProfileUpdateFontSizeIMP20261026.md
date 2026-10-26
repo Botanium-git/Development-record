@@ -15,3 +15,9 @@ Disassembly `llvm-objdump -d --start-address=0x25521c --stop-address=0x255298 T1
 
 ## Interpretation and limits
 This IMP is a **refresh orchestrator**, not a direct call to the archived `fontSizeWithBaselineFontSize:contentSizeCategory:contentSizeModifier:windowSize:` helper in its observed instructions. Its bio refresh first forwards to `_t1_refreshBioLabel`, and indirect model/font setup may occur downstream. This does **not** disprove that the helper is ultimately used. Next trace `0x257C70` and `0x257E98`, selectors and receiver classes, then CT font provider. Official v12.35 runtime method existence is separately established but its implementation may differ. No application changes, no device experiment.
+
+## Same-session follow-up: bio refresh actually calls setter
+
+Direct original Mach-O disassembly of `-[T1ProfileUserInfoView _t1_refreshBioLabel]`, IMP 0x257C70, confirms that it calls or tail-branches into ObjC selector stub `0x12C72C0`. That stub's selref `0x1A99E78` decodes to `_t1_setBioLabel:withText:entities:isUTF16Entities:`. Call at `0x257D58` forwards x0=self, x2=label, x3=text, x4=entities, w5=0; other branches tail-call the same setter with w5=1 (`0x257DB0`, `0x257DE4`). The inputs and conditional branches are not yet fully decoded. This establishes **updateFontSize → _t1_refreshBioLabel → _t1_setBioLabel:withText:entities:isUTF16Entities:** in original v12.25 code. It does not establish the downstream font provider or Dynamic Type helper.
+
+Reproduce: `llvm-objdump -d --start-address=0x257C70 --stop-address=0x257DE8 T1Twitter.macho`; `llvm-objdump -d --start-address=0x12C72C0 --stop-address=0x12C72D4 T1Twitter.macho`. No changes to application or SXP.
