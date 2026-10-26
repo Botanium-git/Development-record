@@ -57,3 +57,16 @@ The setter's entry takes d0/d1/d2/d3 as incoming numeric parameters; at 0x367390
 **Important correction to previous entry:** The bytes at 0x367604 are a stack-check failure continuation (after 0x3675E8 comparison and 0x3675EC B.NE 0x367604); the call to stub 0x2ED5BBC there is an exceptional guard/failure path. The subsequent 0x36760C STR d0 to 0x46BD018 is not evidence that normal application execution routinely computes and updates that value. Accordingly withdraw the prior claim that this is a normal 'calculated double writer' until function boundaries and intended reachability are proved. Normal return is 0x367600.
 
 The original X v12.25 binary establishes setter identity, but who invokes it and which runtime values (14/17 among others) are passed remain unverified. In particular the connection from prior 0x244F2F4 category/window helper to this setter or profile Bio remains unproven. No SCARLET-X/SXP code changes.
+
+
+## 2026-10-26 — Setter caller found in XServiceLibraries (original binary)
+
+Prior work established setter `tfn_setContentFontSize:minimum:maximum:maximumDynamic:` IMP 0x367360 and profile Bio -> xds_body -> token0 -> dynamic offset. New scoped read-only binary scan:
+
+- Original `XServiceLibraries` Mach-O selector ref **0x43D1FF0**, stub at **0x2F557E0**, selector `tfn_setContentFontSize:minimum:maximum:maximumDynamic:`. A whole `__TEXT` direct BL scan finds **one** direct BL to this specific stub at **0x2439330**. This excludes other ObjC message-send stubs, indirect calls and other images; no claim of unique runtime caller.
+- Immediately earlier in the same code region, two selector sends at **0x24392CC** and **0x2439300** resolve to `fontSizeWithBaselineFontSize:contentSizeCategory:contentSizeModifier:windowSize:` (stub 0x2F03BC0).
+- At **0x243930C** the receiver gets `tfn_minimumFontSize` (stub 0x2F54D80), and at **0x2439318** it gets `tfn_maximumFontSize` (stub 0x2F54D60).
+- Just before setter call: `0x2439324 mov v0,v10`; `0x2439328 mov v1,v11`; `0x243931C mov v2,v0` (returned maximum value); `0x243932C mov v3,v9`; `0x2439330 bl 0x2F557E0`. This validates transfer of computed double arguments into the four setter slots. Note first and fourth setter sizes are sourced from different preceding formula calls (the second formula return saved in v9); nominal semantic labels are suggested by method selector but verify callers/branch conditions before claiming exact runtime numbers.
+- `0x2439264` also sends `tfn_defaultFontSize` (stub 0x2F53F20), and `0x24392CC` passes a computed category/provider and window-size vector. Exact top-level method owner and dynamic settings origin are **not yet resolved**.
+
+**New conclusion:** font-size calculator is upstream of a setter of shared dynamic typography state within original v12.25 code. It is **not yet proven that the same path runs for every Bio render or that 12.35 uses identical code**, and runtime size on iPhone15 remains unknown. No implementation change to SCARLET-X/SXP; no build/device test.
