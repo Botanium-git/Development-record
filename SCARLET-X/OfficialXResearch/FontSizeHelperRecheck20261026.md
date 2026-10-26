@@ -27,3 +27,20 @@ llvm-objdump -d --start-address=0xD57124 --stop-address=0xD57170 XServiceLibrari
 ```
 
 No changes to SCARLET-X / SXP, no new build, no device test.
+
+
+## 2026-10-26 follow-up — resolved flag and category offset selector from original IPA
+
+Extracted bytes directly from the user-supplied official X v12.25 IPA XServiceLibraries Mach-O and disassembled only scoped original instruction windows. This corrects the earlier unresolved selector status; no prior offsets or category formulas are claimed as newly discovered.
+
+- Helper at `0x244EDBC` obtains receiver from `0x43E9C50`; ObjC stub `0x2F188A0` loads selector pointer from `0x43C2C20`. Mach-O chained pointer low address `0x3705875` resolves to original `isFontSizeIgnoreDeviceWidthEnabled` C string. This gives direct method-name evidence matching prior archived key `ios_ui_font_size_ignore_device_width_enabled`; actual config source/value on each device remains unobserved.
+- The `0x2F161C0` stub reads selector pointer `0x43C2268`, original string `integerValue` at `0x37025EC`. Receiver is selected category object (`x19`) prepared by the helper. Thus this path converts a category-derived object to integer, but the exact category-to-offset selector/provider remains to trace.
+- `0x244EDC8 cmp x21,#1`; `0x244EDCC csinc x8,x21,xzr,lt`; `0x244EDD0 cmp w0,#0`; `0x244EDD4 csel x21,x8,x21,ne`: **if flag true effective window class = min(original class,1),** for nonnegative class values, not zero. If flag false original class retained.
+- `0x244EDE4 bl integerValue`; `0x244EDE8 add x8,x0,x20`; `0x244EDEC add x8,x8,x21`; `0x244EDF0 scvtf d0,x8`; `0x244EDF4 fadd d0,d8,d0`; `0x244EDF8 frinta d8,d0`. For ordinary finite input and signed integer arithmetic without overflow the resulting calculation is `roundTiesAway(baseline + categoryInteger + modifier + effectiveWindowClass)`; no min/max clamps in THIS helper. Callers may clamp elsewhere. Flag does not eliminate the difference between screen classes 0 (320pt SE) and 1 (393pt iPhone 15).
+- `_TFNWindowSizeClassForSize` takes the lesser dimension and compares against original in-Mach-O constants 376.0,401.0,513.0 (VM 0x3082040, 0x3082038, 0x3082030 respectively) to return 0/1/2/3. This reproduces the exact prior decoded thresholds for ordinary finite dimensions; do not assume the bio call passes physical screen bounds rather than another windowSize.
+
+### Remaining blockers
+
+- Identify how category offset object is produced before its `integerValue` message and confirm exact 12-category mapping at this call site.
+- Confirm actual bio font provider calls `fontSizeWithBaselineFontSize:contentSizeCategory:contentSizeModifier:windowSize:` (or distinct path); find baseline, modifier, content category, runtime flag, and passed windowSize for profile-detail bio. Static v12.25 evidence does not prove live v12.35 selection.
+- Implement no guessed font value or global UI changes. SCARLET-X and SXP untouched during this follow-up.
