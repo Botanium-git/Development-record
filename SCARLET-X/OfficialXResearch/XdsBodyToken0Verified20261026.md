@@ -70,3 +70,16 @@ Prior work established setter `tfn_setContentFontSize:minimum:maximum:maximumDyn
 - `0x2439264` also sends `tfn_defaultFontSize` (stub 0x2F53F20), and `0x24392CC` passes a computed category/provider and window-size vector. Exact top-level method owner and dynamic settings origin are **not yet resolved**.
 
 **New conclusion:** font-size calculator is upstream of a setter of shared dynamic typography state within original v12.25 code. It is **not yet proven that the same path runs for every Bio render or that 12.35 uses identical code**, and runtime size on iPhone15 remains unknown. No implementation change to SCARLET-X/SXP; no build/device test.
+
+## 2026-10-26 — formula caller argument-register provenance (follow-up)
+
+Original supplied official X v12.25 `XServiceLibraries.macho`, scoped disassembly `0x2439244..0x2439334`. This extends the existing caller finding, not a second discovery of the callsites.
+
+- `0x2439254..0x2439260`: loads class references at **0x43EB548** and **0x43E8DF0**, invokes stub 0x2ED6594 on both, retains receivers in x19/x21. Their concrete class/object identities remain to resolve through chained binds/selector, not guessed.
+- `0x2439264`: sends `tfn_defaultFontSize` to x21; result saved in v10. **The initial baseline for the first formula is this returned double** (v0 restored from v10 at 0x24392B8), not a hardcoded literal at the callsite.
+- `0x2439290..0x2439294`: derives object x20 from helper 0x243BB78 (receiver in x22). This x20 is passed to the first formula as x2 (content-size category slot) at 0x24392BC. The exact category and x22 provenance need more examination.
+- `0x24392B4..0x24392CC`: x0=x19, d0=v10, x2=x20, **x3=0**, v1=v8, v2=v9, then calls selector stub 0x2F03BC0 (fontSizeWithBaselineFontSize:contentSizeCategory:contentSizeModifier:windowSize:). d0 returned saved into v10.
+- `0x24392DC..0x2439300`: obtains another `tfn_defaultFontSize` from x21; x2 is read via pointer VM **0x3DF7C68**, x0=x19, **x3=0**, v1=v8, v2=v9 before calling same formula again; result saved in v9. The pointer's target/type is not established; do not label it as a concrete size category.
+- `0x2439308..0x2439330`: x21 receives `tfn_minimumFontSize` into v11 and `tfn_maximumFontSize` into v2. Then invokes `tfn_setContentFontSize:minimum:maximum:maximumDynamic:` with **v0=first formula result, v1=minimum, v2=maximum, v3=second formula result**. This establishes position-level provenance for all four doubles at this callsite. The numeric values in use depend on receivers, input category, window and settings.
+
+Limit: enclosing code is in a large compiled region with Swift/ObjC bridging and indirect dispatch. **This pass has not identified the containing method owner or confirmed top-level on-screen event, caller chain or official X v12.35 equivalent.** Neither instance-category details nor runtime 14/17 values are asserted for Bio/iPhone 15. Prior Core Text findings are unchanged. No application/SXP modification.
