@@ -47,3 +47,13 @@ Read-only static analysis of supplied official X v12.25 `XServiceLibraries.macho
 - `0x367644` currently selects the lesser of double globals 0x448CB88 / 0x448CB90 for finite values (their original file initial values are 17 and 14), which can be modified by the setter. The fixed original file bytes are not sufficient to deduce a live Bio font size across devices/settings.
 
 **Next:** resolve the Objective-C method registration/selector for `0x367360` and the 0x2ED5BBC computation, find their callers and the incoming double argument values. Establish whether `fontSizeWithBaselineFontSize:... 0x244F2F4` is upstream of any setter; its connection is not proven. Also compare v12.35 live runtime independently. No SCARLET-X/SXP changes or runtime verification.
+
+## 2026-10-26 — setter identity confirmed and exceptional-path correction
+
+Read original v12.25 XServiceLibraries Mach-O directly. Relative Objective-C method list: relative IMP field 0x2F8A50C resolves to 0x367360; its selector field at 0x2F8A504 resolves via selref 0x43D1FF0 to the original string **tfn_setContentFontSize:minimum:maximum:maximumDynamic:** (at 0x375CEF4). This **confirms the setter IMP and selector**, rather than the earlier unnamed writer.
+
+The setter's entry takes d0/d1/d2/d3 as incoming numeric parameters; at 0x367390 writes d1 to 0x46BD010; 0x367398 writes d2 to 0x448CB80; 0x3673A0 writes d3 to 0x448CB88; 0x3673A8 resets 0x46BD018; d0 is preserved as d8 and conditionally stored at 0x3673D0 into 0x448CB90 after comparing existing and incoming values with a small epsilon. The ordering of the four parameters is supported by the selector's names and ABI, but exact meaning under all branches/runtime flags still needs caller examination.
+
+**Important correction to previous entry:** The bytes at 0x367604 are a stack-check failure continuation (after 0x3675E8 comparison and 0x3675EC B.NE 0x367604); the call to stub 0x2ED5BBC there is an exceptional guard/failure path. The subsequent 0x36760C STR d0 to 0x46BD018 is not evidence that normal application execution routinely computes and updates that value. Accordingly withdraw the prior claim that this is a normal 'calculated double writer' until function boundaries and intended reachability are proved. Normal return is 0x367600.
+
+The original X v12.25 binary establishes setter identity, but who invokes it and which runtime values (14/17 among others) are passed remain unverified. In particular the connection from prior 0x244F2F4 category/window helper to this setter or profile Bio remains unproven. No SCARLET-X/SXP code changes.
